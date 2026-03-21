@@ -68,4 +68,5 @@ networks:
   frontend:
     external: true
   immich-net:
+    name: immich-net
     driver: bridge
