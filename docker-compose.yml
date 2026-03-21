@@ -5,8 +5,14 @@ services:
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
-    env_file:
-      - .env
+    environment:
+      TZ: ${TZ:-Europe/Dublin}
+      DB_HOSTNAME: database
+      DB_PORT: 5432
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE_NAME: ${DB_DATABASE_NAME}
+      REDIS_HOSTNAME: redis
     volumes:
       - ${UPLOAD_LOCATION}:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
@@ -25,8 +31,8 @@ services:
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
-    env_file:
-      - .env
+    environment:
+      TZ: ${TZ:-Europe/Dublin}
     volumes:
       - ${MODEL_CACHE_PATH}:/cache
     networks:
