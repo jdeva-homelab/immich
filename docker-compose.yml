@@ -12,16 +12,16 @@ services:
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_DATABASE_NAME: ${DB_DATABASE_NAME}
-      REDIS_HOSTNAME: redis
+      REDIS_HOSTNAME: shared_valkey
     volumes:
       - ${UPLOAD_LOCATION}:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
     depends_on:
-      - redis
       - database
     networks:
       - frontend
       - immich-net
+      - valkey-net
     healthcheck:
       disable: false
 
@@ -39,17 +39,6 @@ services:
       - immich-net
     healthcheck:
       disable: false
-
-  redis:
-    container_name: immich_redis
-    image: docker.io/valkey/valkey:9
-    restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
-    networks:
-      - immich-net
-    healthcheck:
-      test: redis-cli ping || exit 1
 
   database:
     container_name: immich_postgres
@@ -76,3 +65,5 @@ networks:
   immich-net:
     name: immich-net
     driver: bridge
+  valkey-net:
+    external: true
